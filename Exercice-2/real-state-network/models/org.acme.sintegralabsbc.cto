@@ -17,3 +17,102 @@
  */
 
 namespace org.acme.sintegralabsbc
+import composer.base.*
+
+participant Buyer identified by buyerID extends Member{
+    o String buyerID
+    
+}
+
+participant Seller identified by sellerID extends Member{
+    o String sellerID
+    
+}
+
+participant FinanceCo identified by financeCoID extends Member {
+    o String financeCoID
+    
+}
+
+asset Order identified by orderNumber {
+    o String orderNumber
+    o Status status
+    o Integer amount
+    o String boughtDate
+    o String createdDate
+    o String orderedDate
+    o String paymentRequestedDate
+    o String exchangeDate
+    o String createdContractDate
+    o String breakContractDate
+    o String paidDate    
+    --> Buyer buyer
+    --> Seller seller
+    --> FinanceCo financeco
+}
+enum Status{
+  o init
+  o Order_Created
+  o Purchased
+  o Rented
+  o Break_Contract
+  o Payment_Requested
+  o Contract_Requested
+  o Break_Contract_Requested
+  o Rented_Requested
+  o Paid
+}
+transaction CreateOrder {
+    o Integer amount
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
+  transaction Buy {
+    --> Order order
+    --> Buyer buyer
+    --> FinanceCo financeco
+}
+  transaction RequestPayment {
+    --> Order order
+    --> Seller seller
+    --> FinanceCo financeCo
+}
+  transaction Pay {
+    --> Order order
+    --> Seller seller
+    --> FinanceCo financeCo
+}
+transaction Rented {
+  o Integer guarantee
+    --> Order order
+    --> Buyer buyer
+    --> FinanceCo financeco
+}
+transaction ContractRequested {
+    o Integer amount
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
+transaction RentedRequested {
+    o Integer amount
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
+transaction Break {
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
+transaction BreakRequested {
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
+  transaction Exchange {
+    --> Order order
+    --> Buyer buyer
+    --> Seller seller
+}
